@@ -7,8 +7,34 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 }
 
+function indexOfMax(arr) {
+  // from https://stackoverflow.com/questions/11301438/return-index-of-greatest-value-in-an-array/11301464
+  if (arr.length === 0) {
+      return -1;
+  }
+
+  var max = arr[0];
+  var maxIndex = 0;
+
+  for (var i = 1; i < arr.length; i++) {
+      if (arr[i] > max) {
+          maxIndex = i;
+          max = arr[i];
+      }
+  }
+
+  return maxIndex;
+}
+
 const Button = ({ text, clickHandler}) => (
   <button onClick={clickHandler}>{text}</button>
+)
+
+const Anecdote = (props) => (
+  <div>
+    <p>{props.anecdotes[props.selected]}</p>
+    <p>has {props.points[props.selected]} votes</p>
+  </div>
 )
 
 const App = () => {
@@ -38,10 +64,13 @@ const App = () => {
 
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
-      <p>has {points[selected]} votes</p>
+      <h1>Anecdote of the day</h1>
+      <Anecdote anecdotes={anecdotes} points={points} selected={selected}/>
       <Button text="vote" clickHandler={vote} />
       <Button text="next anecdote" clickHandler={nextAnecdote} />
+      <h1>Anecdote with most votes</h1>
+      <Anecdote anecdotes={anecdotes} points={points} selected={indexOfMax(points)}/>
+      
     </div>
   )
 
