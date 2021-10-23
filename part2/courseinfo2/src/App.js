@@ -7,7 +7,8 @@ const Header = ({ course }) => {
 }
 
 const Total = ({ course }) => {
-  const sum = course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises
+  const reducer = (previousValue, part) => previousValue + part.exercises
+  const sum = course.parts.reduce(reducer, 0)
   return(
     <p>Number of exercises {sum}</p>
   ) 
@@ -27,6 +28,7 @@ const Course = ({ course }) => {
       <Header course={course} />
       {course.parts.map(part => 
         <Part part={part} key={part.id}/>)}
+      <Total course={course} />
     </div>
   )
 }
@@ -50,11 +52,6 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
-      },
-      {
-        name: 'Other',
-        exercises: 12,
-        id: 4
       }
     ]
   }
