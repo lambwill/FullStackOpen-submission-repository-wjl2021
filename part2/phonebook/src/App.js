@@ -32,7 +32,7 @@ const App = () => {
     if (pos === -1) {
       setPersons(persons.concat({ name: newName, id:persons.length}))
     } else {
-      window.alert(newName + " is already added to phonebook")
+      window.alert(`${newName} is already added to phonebook`)
     }
   }
 
