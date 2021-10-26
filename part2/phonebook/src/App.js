@@ -13,15 +13,17 @@ const Numbers = ({ numbers }) => {
 const Number = ( {number} ) => 
 {console.log("number =", number)
   return (
-    <p>{number.name}</p>
+    <p>{number.name} {number.number}</p>
   )
 }
 
 const App = () => {
   const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas', id: 0 }
+    { name: 'Arto Hellas', number:'040-1234567', id: 0 }
   ]) 
+
   const [ newName, setNewName ] = useState('')
+  const [ newNumber, setNewNumber ] = useState('')
 
   const addName = (event) => {
     event.preventDefault()
@@ -30,15 +32,20 @@ const App = () => {
     const pos = names.indexOf(newName)
     console.log(pos);
     if (pos === -1) {
-      setPersons(persons.concat({ name: newName, id:persons.length}))
+      setPersons(persons.concat({ name: newName, number: newNumber, id:persons.length}))
     } else {
       window.alert(`${newName} is already added to phonebook`)
     }
   }
 
   const handleNameChange = (event) => {
-    console.log(event.target.value)
+    console.log('newName:',event.target.value)
     setNewName(event.target.value)
+  }
+
+  const handleNumberChange = (event) => {
+    console.log('newNumber:',event.target.value)
+    setNewNumber(event.target.value)
   }
 
   return (
@@ -49,6 +56,11 @@ const App = () => {
           name: <input 
                   value={newName} 
                   onChange={handleNameChange}/>
+        </div>
+        <div>
+          number: <input 
+                  value={newNumber} 
+                  onChange={handleNumberChange}/>
         </div>
         <div>
           <button type="submit">add</button>
