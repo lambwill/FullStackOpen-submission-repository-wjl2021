@@ -1,21 +1,50 @@
 import React, { useState } from 'react'
 
+const Filter = ( {value, onChange} ) => (
+  <div>
+    filter shown with <input value={value} onChange={onChange}/>
+  </div>
+)
+
+const ContactForm = ( props ) => {
+
+  return (
+    <form onSubmit={props.addName}>
+      <div>
+        name: <input 
+                value={props.newName} 
+                onChange={props.handleNameChange}/>
+      </div>
+      <div>
+        number: <input 
+                value={props.newNumber} 
+                onChange={props.handleNumberChange}/>
+      </div>
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
+  )
+}
+
+
 const Contacts = ({ contacts }) => {
   console.log("contacts =", contacts)
   return (
     <div>
       {contacts.map( contact => <Contact contact={contact} key={contact.id}/>)}
-    </div>
+    </div>    
   )
   
-}
+}  
 
 const Contact = ( {contact} ) => 
 {console.log("contact =", contact)
   return (
     <p>{contact.name} {contact.number}</p>
-  )
-}
+  )  
+}  
+
 
 const App = () => {
   const [ persons, setPersons ] = useState([
@@ -57,14 +86,6 @@ const App = () => {
     setFilter(event.target.value)
   }
 
-
-  /*
-  const filterContact = (reFilter) => {
-    const contactIn = person.name.search(reFilter) >= 0
-    console.log('reFilter:',reFilter,'contactIn:',contactIn);
-  }
-  */
-
   const filterContacts = () => {
     const filteredContacts = persons.filter( person => person.name.toUpperCase().indexOf(filter.toUpperCase()) >= 0 )
     console.log( 'filteredContacts:', filteredContacts )
@@ -75,26 +96,20 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      filter shown with <input value={filter} onChange={handleFilter}/>
+      <Filter value={filter} onChange={handleFilter} />
+
       <h2>add a new</h2>
-      <form onSubmit={addName}>
-        <div>
-          name: <input 
-                  value={newName} 
-                  onChange={handleNameChange}/>
-        </div>
-        <div>
-          number: <input 
-                  value={newNumber} 
-                  onChange={handleNumberChange}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <ContactForm 
+        addName={addName}
+        newName={newName}
+        handleNameChange={handleNameChange}
+        newNumber={newNumber}
+        handleNumberChange={handleNumberChange}
+      />
+
       <h2>Contacts</h2>
       <Contacts contacts={filterContacts()} />
-      <div>debug: {newName}</div>
+
     </div>
   )
 }
