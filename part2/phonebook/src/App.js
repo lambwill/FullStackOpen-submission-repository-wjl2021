@@ -1,19 +1,19 @@
 import React, { useState } from 'react'
 
-const Numbers = ({ numbers }) => {
-  console.log("numbers =", numbers)
+const Contacts = ({ contacts }) => {
+  console.log("contacts =", contacts)
   return (
     <div>
-      {numbers.map( number => <Number number={number} key={number.id}/>)}
+      {contacts.map( contact => <Contact contact={contact} key={contact.id}/>)}
     </div>
   )
   
 }
 
-const Number = ( {number} ) => 
-{console.log("number =", number)
+const Contact = ( {contact} ) => 
+{console.log("contact =", contact)
   return (
-    <p>{number.name} {number.number}</p>
+    <p>{contact.name} {contact.number}</p>
   )
 }
 
@@ -53,9 +53,24 @@ const App = () => {
   }
 
   const handleFilter = (event) => {
-    console.log('filter:',event.target.value)
+    console.log('filter value:',event.target.value)
     setFilter(event.target.value)
   }
+
+
+  /*
+  const filterContact = (reFilter) => {
+    const contactIn = person.name.search(reFilter) >= 0
+    console.log('reFilter:',reFilter,'contactIn:',contactIn);
+  }
+  */
+
+  const filterContacts = () => {
+    const filteredContacts = persons.filter( person => person.name.toUpperCase().indexOf(filter.toUpperCase()) >= 0 )
+    console.log( 'filteredContacts:', filteredContacts )
+    return filteredContacts
+  }
+
 
   return (
     <div>
@@ -77,8 +92,8 @@ const App = () => {
           <button type="submit">add</button>
         </div>
       </form>
-      <h2>Numbers</h2>
-      <Numbers numbers={persons} />
+      <h2>Contacts</h2>
+      <Contacts contacts={filterContacts()} />
       <div>debug: {newName}</div>
     </div>
   )
