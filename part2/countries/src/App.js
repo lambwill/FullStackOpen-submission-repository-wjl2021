@@ -29,8 +29,23 @@ const LanguagesList = ({ languages }) => {
   console.log('languages:',languages)
   return (
     <div>
-      <h2>languages</h2>
+      <h2>Spoken languages</h2>
       {Object.entries(languages).map((language) => <li key={language[0]}>{language[1]}</li> )}
+    </div>
+  )
+}
+
+const Weather = ({ weather }) => {
+  console.log(weather);
+  if (weather == null) return null
+  if (Object.keys(weather).length === 0) return null
+  if (weather.success == false) return null
+  return (
+    <div>
+      <h2>Weather in {weather.location.name}</h2>
+      <p><b>temperature:</b> {weather.current.temperature} Celcius</p>
+      <img src={weather.current.weather_icons[0]} alt="Weather" />
+      <p><b>wind: {weather.current.wind_speed} mph direction {weather.current.wind_dir}</b></p>
     </div>
   )
 }
@@ -40,6 +55,7 @@ const CountryData = ({ country }) => {
   if (Object.keys(country).length > 0) {
     return (
       <div>
+        <h1>{country.name.common}</h1>
         <p>capital {country.capital}</p>
         <p>population {country.population}</p>
         <LanguagesList languages={country.languages}/>
@@ -79,9 +95,10 @@ const App = () => {
   const [countries, setCountries] = useState([])
   const [displayCountry, setDisplayCountry] = useState({})
   const [filter, setFilter] = useState('')
+  const [weather, setWeather] = useState({})
 
   const hook = () => {
-    console.log('effect')
+    console.log('effect: fetch countries')
     axios
       .get('https://restcountries.com/v3.1/all')
       .then(response => {
@@ -105,17 +122,35 @@ const App = () => {
   const filteredCountries = filterCountries()
 
   useEffect(() => {
+    console.log('effect: setDisplayCountry');
     if (filteredCountries.length === 1) {
       setDisplayCountry(filteredCountries[0])
     } 
   },[filteredCountries])
   
+  useEffect(() => {
+    const api_key = process.env.REACT_APP_API_KEY
+    console.log('Weather efect, API key:',api_key);
+    console.log('displayCountry:',displayCountry);
+    if (displayCountry == null) return
+    if (Object.keys(displayCountry).length === 0) return
+    const apiRequest = `http://api.weatherstack.com/current?access_key=${api_key}&query=${displayCountry.capital}`
+    console.log('request URL:',apiRequest);
+    axios
+      .get(apiRequest)
+      .then(response => {
+        console.log('Weather data recieved: ',response.data);
+        if (response.data.success == false) setWeather({})
+        setWeather(response.data)
+      })
+  },[displayCountry])
 
   return (
     <div>
       <Find filter={filter} handleFilter={handleFilter}/>
       <CountriesDisplay countries={filteredCountries} setDisplayCountry={setDisplayCountry}/>
       <CountryData country={displayCountry} />
+      <Weather weather={weather} />
     </div>
   )
 }
