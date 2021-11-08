@@ -39,7 +39,7 @@ const Weather = ({ weather }) => {
   console.log(weather);
   if (weather == null) return null
   if (Object.keys(weather).length === 0) return null
-  if (weather.success == false) return null
+  if (weather.success === false) return null
   return (
     <div>
       <h2>Weather in {weather.location.name}</h2>
@@ -140,7 +140,7 @@ const App = () => {
       .get(apiRequest)
       .then(response => {
         console.log('Weather data recieved: ',response.data);
-        if (response.data.success == false) setWeather({})
+        if (response.data.success === false) setWeather({})
         setWeather(response.data)
       })
   },[displayCountry])

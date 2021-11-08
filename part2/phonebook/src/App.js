@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const Filter = ( {value, onChange} ) => (
   <div>
@@ -47,12 +48,7 @@ const Contact = ( {contact} ) =>
 
 
 const App = () => {
-  const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-  ]) 
+  const [ persons, setPersons ] = useState([]) 
 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
@@ -65,7 +61,16 @@ const App = () => {
     const pos = names.indexOf(newName)
     console.log(pos);
     if (pos === -1) {
-      setPersons(persons.concat({ name: newName, number: newNumber, id:persons.length}))
+      axios
+        .post(`${baseUrl}`,{ 
+          name: newName, 
+          number: newNumber })
+        .then(response => {
+          setPersons(persons.concat(response.data))
+          setNewName('')
+          setNewNumber('')
+        })
+      
     } else {
       window.alert(`${newName} is already added to phonebook`)
     }
@@ -91,6 +96,19 @@ const App = () => {
     console.log( 'filteredContacts:', filteredContacts )
     return filteredContacts
   }
+
+  const baseUrl = 'http://localhost:3001/persons'
+
+  useEffect(() => {
+    console.log('Effect; fetch phonebook');
+    axios
+      .get(`${baseUrl}`)
+      .then(response => {
+        console.log('Promise; phonebook response:',response.data);
+        setPersons(response.data)
+      })
+  }
+  ,[])
 
 
   return (
