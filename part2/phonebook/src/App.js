@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import personsService from './services/persons'
 
 const Filter = ( {value, onChange} ) => (
   <div>
@@ -61,12 +62,12 @@ const App = () => {
     const pos = names.indexOf(newName)
     console.log(pos);
     if (pos === -1) {
-      axios
-        .post(`${baseUrl}`,{ 
+      personsService
+        .create({ 
           name: newName, 
           number: newNumber })
         .then(response => {
-          setPersons(persons.concat(response.data))
+          setPersons(persons.concat(response))
           setNewName('')
           setNewNumber('')
         })
@@ -97,15 +98,13 @@ const App = () => {
     return filteredContacts
   }
 
-  const baseUrl = 'http://localhost:3001/persons'
-
   useEffect(() => {
     console.log('Effect; fetch phonebook');
-    axios
-      .get(`${baseUrl}`)
+    personsService
+      .getAll()
       .then(response => {
-        console.log('Promise; phonebook response:',response.data);
-        setPersons(response.data)
+        console.log('Promise; phonebook response:',response);
+        setPersons(response)
       })
   }
   ,[])
