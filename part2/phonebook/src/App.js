@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import personsService from './services/persons'
 
 const Filter = ( {value, onChange} ) => (
@@ -29,21 +28,36 @@ const ContactForm = ( props ) => {
   )
 }
 
+const BtnRemove = ({ contact,handleRemove }) => {
+  console.log("Render delete button for ", contact.name)
+  const onClick = () => handleRemove(contact)
+  //const onClick = () => console.log("onClick function: ", contact)
+  console.log("onClick function: ", handleRemove)
+  return (
+    <input type="button" value="delete" onClick={onClick}/>
+  )
+}
 
-const Contacts = ({ contacts }) => {
+const Contacts = ({ contacts, handleRemove }) => {
   console.log("contacts =", contacts)
   return (
     <div>
-      {contacts.map( contact => <Contact contact={contact} key={contact.id}/>)}
+      {contacts.map( contact => {
+        return (
+          <li key={contact.id}>
+            <Contact contact={contact}  />
+            <BtnRemove contact={contact} handleRemove={handleRemove}/>
+          </li>)}
+      )}
     </div>    
   )
   
 }  
 
-const Contact = ( {contact} ) => 
-{console.log("contact =", contact)
+const Contact = ({ contact }) => 
+  {console.log("contact =", contact)
   return (
-    <p>{contact.name} {contact.number}</p>
+    <>{contact.name} {contact.number} </>
   )  
 }  
 
@@ -75,6 +89,17 @@ const App = () => {
     } else {
       window.alert(`${newName} is already added to phonebook`)
     }
+  }
+
+  const handleRemove = (contact) => {
+    console.log('remove: ', contact.name);
+    personsService
+      .remove(contact)
+      .then(response => {
+        console.log('delete:',response)
+        if (response.status !== 200) return 
+        setPersons(persons.filter(person => person.id !== contact.id))
+      })
   }
 
   const handleNameChange = (event) => {
@@ -125,7 +150,7 @@ const App = () => {
       />
 
       <h2>Contacts</h2>
-      <Contacts contacts={filterContacts()} />
+      <Contacts contacts={filterContacts()} handleRemove={handleRemove}/>
 
     </div>
   )
