@@ -93,13 +93,15 @@ const App = () => {
 
   const handleRemove = (contact) => {
     console.log('remove: ', contact.name);
-    personsService
-      .remove(contact)
-      .then(response => {
-        console.log('delete:',response)
-        if (response.status !== 200) return 
-        setPersons(persons.filter(person => person.id !== contact.id))
-      })
+    if (window.confirm(`Do you really want to delete ${contact.name}?`)) {
+      personsService
+        .remove(contact)
+        .then(response => {
+          console.log('delete:',response)
+          if (response.status !== 200) return 
+          setPersons(persons.filter(person => person.id !== contact.id))
+        })
+      }
   }
 
   const handleNameChange = (event) => {
