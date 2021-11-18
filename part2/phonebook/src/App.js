@@ -98,9 +98,8 @@ const App = () => {
           response => {
             console.log('update response: ', response)
             setPersons(persons.map(person => person.id !== updatedPerson.id ? person: response))
-          
-          }
-        )
+          })
+          .catch((err) => console.log(err.response.data))
     }
   }}
 

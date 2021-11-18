@@ -19,11 +19,17 @@ const remove = removeObject => {
 
 const update = updateObject => {
   console.log('personsService.update:',updateObject);
-  const request = axios.post(baseUrl, updateObject)
+  const request = axios.put(`${baseUrl}/${updateObject.id}`, updateObject)
+                        .catch((err) => {
+                          console.log(err)
+                          /*if (err.response.data) {
+                            console.log(err.response.data)
+                          }*/
+                        })
   return request.then(response => {
-    console.log('update POST response:',response.data); 
-    return response.data
-  })
+                      console.log('update POST response:',response.data); 
+                      return response.data
+                    })
 }
 
 export default { getAll, create, remove, update }
