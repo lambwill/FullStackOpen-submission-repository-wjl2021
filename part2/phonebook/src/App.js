@@ -87,9 +87,22 @@ const App = () => {
         })
       
     } else {
-      window.alert(`${newName} is already added to phonebook`)
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        console.log('replace',newName);
+        const person = persons.find(person => person.name === newName)
+        const updatedPerson = { ...person, number: newNumber}
+        console.log('updatedPerson:',updatedPerson);
+        const response = personsService.update(updatedPerson)
+        console.log('update response: ', response);
+        response.then(
+          response => {
+            console.log('update response: ', response)
+            setPersons(persons.map(person => person.id !== updatedPerson.id ? person: response))
+          
+          }
+        )
     }
-  }
+  }}
 
   const handleRemove = (contact) => {
     console.log('remove: ', contact.name);

@@ -17,4 +17,13 @@ const remove = removeObject => {
   return request
 }
 
-export default { getAll, create, remove }
+const update = updateObject => {
+  console.log('personsService.update:',updateObject);
+  const request = axios.post(baseUrl, updateObject)
+  return request.then(response => {
+    console.log('update POST response:',response.data); 
+    return response.data
+  })
+}
+
+export default { getAll, create, remove, update }
