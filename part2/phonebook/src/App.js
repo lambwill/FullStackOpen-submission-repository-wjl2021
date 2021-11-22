@@ -64,8 +64,26 @@ const Notification = ({ notificationMessage }) => {
   if (notificationMessage === null) return null
   console.log('Notification:',notificationMessage);
   
+  const styleError = {
+    color: 'red',
+    background: 'lightgrey',
+    fontSize: '20px',
+    borderStyle: 'solid',
+    borderRadius: '5px',
+    padding: '10px',
+    marginBottom: '10px'
+  }
+  const styleSuccess = {
+    color: 'green',
+    background: 'lightgrey',
+    fontSize: '20px',
+    borderStyle: 'solid',
+    borderRadius: '5px',
+    padding: '10px',
+    marginBottom: '10px'
+  }
   return (
-    <div >
+    <div style={styleSuccess}>
       {notificationMessage}
     </div>
   )
