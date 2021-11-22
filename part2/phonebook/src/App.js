@@ -29,10 +29,8 @@ const ContactForm = ( props ) => {
 }
 
 const BtnRemove = ({ contact,handleRemove }) => {
-  console.log("Render delete button for ", contact.name)
+  console.log("Render delete button for:", contact.name)
   const onClick = () => handleRemove(contact)
-  //const onClick = () => console.log("onClick function: ", contact)
-  console.log("onClick function: ", handleRemove)
   return (
     <input type="button" value="delete" onClick={onClick}/>
   )
@@ -136,6 +134,7 @@ const App = () => {
     const timeOut = 5000
     console.log('send message',message, 'for',timeOut,'ms');
     setNotificationMessage(message)
+    console.log(notificationMessage);
     setTimeout(() => {
       setNotificationMessage(null)
     }, timeOut)
@@ -173,7 +172,7 @@ const App = () => {
   }
   ,[])
 
-
+  console.log('NotifictionMessage:',notificationMessage);
   return (
     <div>
       <h1>Phonebook</h1>
@@ -187,7 +186,7 @@ const App = () => {
         newNumber={newNumber}
         handleNumberChange={handleNumberChange}
       />
-      <Notification message={notificationMessage} />
+      <Notification notificationMessage={notificationMessage} />
       <h2>Contacts</h2>
       <Contacts contacts={filterContacts()} handleRemove={handleRemove}/>
 
