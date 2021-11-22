@@ -62,12 +62,27 @@ const Contact = ({ contact }) =>
 }  
 
 
+const Notification = ({ notificationMessage }) => {
+  if (notificationMessage === null) return null
+  console.log('Notification:',notificationMessage);
+  
+  return (
+    <div >
+      {notificationMessage}
+    </div>
+  )
+}
+
+
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ] = useState('')
+
+  const [ notificationMessage, setNotificationMessage] = useState(null)
+  
 
   const addName = (event) => {
     event.preventDefault()
@@ -112,8 +127,18 @@ const App = () => {
           console.log('delete:',response)
           if (response.status !== 200) return 
           setPersons(persons.filter(person => person.id !== contact.id))
+          displayMessage({message:`${contact.name} deleted.`})
         })
       }
+  }
+
+  const displayMessage = ({ message }) => {
+    const timeOut = 5000
+    console.log('send message',message, 'for',timeOut,'ms');
+    setNotificationMessage(message)
+    setTimeout(() => {
+      setNotificationMessage(null)
+    }, timeOut)
   }
 
   const handleNameChange = (event) => {
@@ -162,7 +187,7 @@ const App = () => {
         newNumber={newNumber}
         handleNumberChange={handleNumberChange}
       />
-
+      <Notification message={notificationMessage} />
       <h2>Contacts</h2>
       <Contacts contacts={filterContacts()} handleRemove={handleRemove}/>
 
