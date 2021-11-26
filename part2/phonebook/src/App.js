@@ -141,9 +141,12 @@ const App = () => {
         .remove(contact)
         .then(response => {
           console.log('delete:',response)
-          if (response.status !== 200) return 
+          //if (response.status !== 200) return 
           setPersons(persons.filter(person => person.id !== contact.id))
           displayMessage({message:`${contact.name} deleted.`})
+        })
+        .catch(error => {
+          displayMessage({message:`${contact.name}  was already dfeleted from the server.`})
         })
       }
   }
